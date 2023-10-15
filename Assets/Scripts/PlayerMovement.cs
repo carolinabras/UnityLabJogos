@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,7 +20,8 @@ public class PlayerMovement : MonoBehaviour
     
     private enum MovementState { idle, running, jumping, falling } // movement states of player
     
-    
+    public int maxHealth = 200; // max health of player
+    public int currentHealth; // current health of player
     
     // Start is called before the first frame update
     void Start()
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         collider = GetComponent<BoxCollider2D>();
+        currentHealth = maxHealth; // set current health to max health
     }
 
     // Update is called once per frame
@@ -87,5 +90,25 @@ public class PlayerMovement : MonoBehaviour
     private bool isGrounded()
     {
        return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround); // creates a new box (like the box collider) and checks if it is overlaping with the terrain
+    }
+    
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage; // subtract damage from current health
+        if (currentHealth <= 0) // if current health is less than or equal to 0
+        {
+            Die(); // die
+        }
+    }
+    
+    void Die()
+    {
+        //wait for 2 seconds
+        //restart the game
+        //can create a dying animation if you have it and then destroy the enemy
+        Debug.Log("Player died!"); // log that enemy died
+        Destroy(gameObject); // destroy enemy
+        SceneManager.LoadScene(0);
+
     }
 }
