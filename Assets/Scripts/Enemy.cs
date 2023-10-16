@@ -28,16 +28,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player")) // if the other game object has the tag "Player"
         {
-            other.GetComponent<PlayerMovement>().TakeDamage(basicDamage);
-            
+            other.gameObject.GetComponent<PlayerMovement>().TakeDamage(basicDamage); // take damage
         }
     }
-    
-    
+
 
     void Die()
     {

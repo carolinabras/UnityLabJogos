@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim; // animator of player
 
     private float dirX = 0;
+    public float timeOffGround = 0f;
 
     private SpriteRenderer sprite; // sprite of player
     
@@ -51,8 +53,25 @@ public class PlayerMovement : MonoBehaviour
         {
            rb.velocity = new Vector3(rb.velocity.x,jumpForce,0);
         }
+        
+        if (!isGrounded())
+        {
+            timeOffGround += Time.deltaTime;
+        }
+        else
+        {
+            timeOffGround = 0f;
+        }
+
+        // Check if the player has been off the ground for 5 seconds continuously
+        if (timeOffGround >= 3f)
+        {
+            RestartGame();
+        }
 
         UpdateAnimationState();
+        
+        
     }
 
     private void UpdateAnimationState()
@@ -91,7 +110,16 @@ public class PlayerMovement : MonoBehaviour
     {
        return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround); // creates a new box (like the box collider) and checks if it is overlaping with the terrain
     }
-    
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Trap"))
+        {
+            Die();
+        }
+        
+    }
+
     public void TakeDamage(int damage)
     {
         currentHealth -= damage; // subtract damage from current health
@@ -107,8 +135,13 @@ public class PlayerMovement : MonoBehaviour
         //restart the game
         //can create a dying animation if you have it and then destroy the enemy
         Debug.Log("Player died!"); // log that enemy died
-        Destroy(gameObject); // destroy enemy
-        SceneManager.LoadScene(0);
+        anim.SetTrigger("Die");
 
     }
+    
+    private void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    
 }
