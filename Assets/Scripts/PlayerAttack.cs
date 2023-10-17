@@ -16,10 +16,16 @@ public class PlayerAttack : MonoBehaviour
     public float attackRate = 2f; // attack rate of sword
     float nextAttackTime = 0f; // time until next attack
     
+    public Transform firePoint; // position of fire point
+    public GameObject projectilePrefab; // projectile prefab
+
+    
+    
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -33,6 +39,22 @@ public class PlayerAttack : MonoBehaviour
                 AttackSword();
                 nextAttackTime = Time.time + 1f / attackRate;
             }
+        }
+        if (Input.GetButtonDown("Fire2"))
+        {
+            //spawn projectile
+            //if player is facing right spawn projectile to the right
+            if (gameObject.GetComponent<SpriteRenderer>().flipX == false)
+            {
+                Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
+            }
+            //if player is facing left spawn projectile to the left
+            else
+            {
+                Instantiate(projectilePrefab, firePoint.position, Quaternion.Euler(0, 0, 180f));
+          
+            }
+            
         }
     }
 
