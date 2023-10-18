@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
 {
    
     public GameObject player;
-    [SerializeField] public Canvas canvas;
     
  
     void Start()
@@ -50,9 +49,6 @@ public class GameManager : MonoBehaviour
     void LoadNextLevel()
     {
         Debug.Log("Loading next level");
-        DontDestroyOnLoad(player.GetComponent<PlayerHealth>().gameObject);
-        DontDestroyOnLoad(player.GetComponent<ItemCollector>().gameObject);
-        DontDestroyOnLoad(canvas.gameObject);
         
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
