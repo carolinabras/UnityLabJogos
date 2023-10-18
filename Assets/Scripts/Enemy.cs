@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player")) // if the other game object has the tag "Player"
         {
-            other.gameObject.GetComponent<PlayerMovement>().TakeDamage(basicDamage); // take damage
+            other.gameObject.GetComponent<PlayerHealth>().TakeDamage(basicDamage); // take damage
         }
     }
 

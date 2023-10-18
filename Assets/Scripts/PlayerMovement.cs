@@ -11,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim; // animator of player
 
     private float dirX = 0;
+    
     public float timeOffGround = 0f;
 
     private SpriteRenderer sprite; // sprite of player
@@ -22,8 +23,8 @@ public class PlayerMovement : MonoBehaviour
     
     private enum MovementState { idle, running, jumping, falling } // movement states of player
     
-    public int maxHealth = 200; // max health of player
-    public int currentHealth; // current health of player
+    
+    public bool falling = false;
     
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
         collider = GetComponent<BoxCollider2D>();
-        currentHealth = maxHealth; // set current health to max health
+
     }
 
     // Update is called once per frame
@@ -63,10 +64,10 @@ public class PlayerMovement : MonoBehaviour
             timeOffGround = 0f;
         }
 
-        // Check if the player has been off the ground for 5 seconds continuously
+         //Check if the player has been off the ground for 3 seconds continuously
         if (timeOffGround >= 3f)
         {
-            RestartGame();
+            falling = true;
         }
 
         UpdateAnimationState();
@@ -92,7 +93,6 @@ public class PlayerMovement : MonoBehaviour
             state = MovementState.idle;
         }
         
-        
         //jummping
         if (rb.velocity.y > .1f) // if player is moving up
         {
@@ -108,40 +108,10 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGrounded()
     {
-       return Physics2D.BoxCast(collider.bounds.center, collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround); // creates a new box (like the box collider) and checks if it is overlaping with the terrain
+       return Physics2D.BoxCast(collider.bounds.center, 
+           collider.bounds.size, 0f, Vector2.down, .1f, jumpableGround); // creates a new box (like the box collider) and checks if it is overlaping with the terrain
     }
 
-    public void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Trap"))
-        {
-            Die();
-        }
-        
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage; // subtract damage from current health
-        if (currentHealth <= 0) // if current health is less than or equal to 0
-        {
-            Die(); // die
-        }
-    }
-    
-    void Die()
-    {
-        //wait for 2 seconds
-        //restart the game
-        //can create a dying animation if you have it and then destroy the enemy
-        Debug.Log("Player died!"); // log that enemy died
-        anim.SetTrigger("Die");
-
-    }
-    
-    private void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
+   
     
 }
