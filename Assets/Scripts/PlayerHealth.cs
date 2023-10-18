@@ -44,7 +44,6 @@ public class PlayerHealth : MonoBehaviour
         //restart the game
         //can create a dying animation if you have it and then destroy the enemy
         Debug.Log("Player died!"); // log that enemy died
-        anim.SetTrigger("Die");
         isDead = true;
 
     }

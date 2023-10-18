@@ -9,20 +9,20 @@ public class GameManager : MonoBehaviour
 {
    
     public GameObject player;
+    public Animator anim;
     
- 
-    void Start()
-    {
-        
-         
-    }
     
     void Update()
     {
      if (player.GetComponent<PlayerHealth>().isDead == true)
      {
          Debug.Log("Player is dead");
-         RestartGame();
+         //wait for 2 seconds then call restart game
+         anim.SetTrigger("Die");
+         Invoke("RestartGame", 2f); // this is very ugly but it kinda works? 
+         
+         
+         
      }
      
      if (player.GetComponent<PlayerMovement>().falling == true)

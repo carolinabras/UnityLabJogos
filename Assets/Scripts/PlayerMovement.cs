@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
          //Check if the player has been off the ground for 3 seconds continuously
-        if (timeOffGround >= 3f)
+        if (timeOffGround >= 2f)
         {
             falling = true;
         }
